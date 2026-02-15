@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="main-div">
+            <div id ="chat-div">
+                <ul id="messages">
+                </ul>
+        </div>
+        <div id="div-input">
+            <form id="chat-form">
+                <input type="text" id="message" placeholder="Type a Message" required>
+                <button type="submit">Send</button>
+            </form>
+
+        </div>
+        </div>
+        <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import{getDatabase,ref,push,onChildAdded} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxwyfWQu-adVK2-tzj6s8IraDNE_NpCLk",
+    authDomain: "fir-chatroom-75b93.firebaseapp.com",
+    databaseURL: "https://fir-chatroom-75b93-default-rtdb.firebaseio.com",
+    projectId: "fir-chatroom-75b93",
+    storageBucket: "fir-chatroom-75b93.firebasestorage.app",
+    messagingSenderId: "194556149280",
+    appId: "1:194556149280:web:a354a34d5ea720a2d1c645"
+  };
+
+
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  const db = getDatabase(app);
+  const username = prompt("Enter your name:");
+  document.getElementById("chat-form").addEventListener("submit",function(event){
+    event.preventDefault();
+    const message = document.getElementById("message").value.trim();
+    push(ref(db,"messages"),{
+        Name:username,
+        message:message
+    });
+    document.getElementById("message").value="";
+  });
+
+  const messageslist = document.getElementById("messages");
+  onChildAdded(ref(db,"messages"),(snapshot)=>{
+    const data = snapshot.val();
+    const li = document.createElement("li");
+    li.textContent = data.Name + ": " + data.message;
+    messageslist.appendChild(li);
+  });
+</script>
+
+
+
+    </body>
+</html>
